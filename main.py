@@ -5,10 +5,7 @@ from utils import load_level, create_passability_map
 from level import generate_level
 from groups import tiles_group, player_group, coin_group, bomb_group, all_sprites
 from objects import Player
-
-# Список изображений для пола и стен
-floor = ['floor1.png', 'floor4.png', 'floor5.png']
-wall = ['wall1.png']
+from images import *
 
 if __name__ == '__main__':
     level_map = load_level('level1.txt')

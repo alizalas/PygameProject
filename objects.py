@@ -1,11 +1,14 @@
 import pygame
 import random
+
+from images import coin_image, bomb_image
 from utils import load_image, load_image_sheet
 from groups import all_sprites, tiles_group, coin_group, bomb_group, player_group
 from settings import TILE_WIDTH, TILE_HEIGHT, V
 from animation import AnimatedSprite
 from settings import *
 from utils import load_image_sheet
+
 
 
 
@@ -81,7 +84,7 @@ class Player(pygame.sprite.Sprite):
 
 class Coin(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        sheet = load_image_sheet('coin64.png').convert_alpha()
+        sheet = load_image_sheet(coin_image).convert_alpha()
         super().__init__(sheet, 4, 4, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, 4, all_sprites, coin_group)
 
 
@@ -89,7 +92,7 @@ class Coin(AnimatedSprite):
 
 class Bomb(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        sheet = load_image_sheet('bomb8.png').convert_alpha()
+        sheet = load_image_sheet(bomb_image).convert_alpha()
         super().__init__(sheet, 8, 1, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, 4, all_sprites, bomb_group)
 
     def update(self):
