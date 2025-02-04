@@ -34,15 +34,6 @@ class Player(pygame.sprite.Sprite):
     def move(self, dx, dy, passability_map):
         new_x, new_y = self.pos_x + dx, self.pos_y + dy
         if 0 <= new_x < len(passability_map[0]) and 0 <= new_y < len(passability_map):
-            if passability_map[new_y][new_x]:  # Если клетка проходима
-                self.pos_x = new_x
-                self.pos_y = new_y
-                self.rect.x = TILE_WIDTH * self.pos_x + 15
-                self.rect.y = TILE_HEIGHT * self.pos_y + 5
-
-    def move(self, dx, dy, passability_map):
-        new_x, new_y = self.pos_x + dx, self.pos_y + dy
-        if 0 <= new_x < len(passability_map[0]) and 0 <= new_y < len(passability_map):
             if passability_map[new_y][new_x]:
                 self.pos_x = new_x
                 self.pos_y = new_y
@@ -53,7 +44,6 @@ class Player(pygame.sprite.Sprite):
             self.is_moving = False
 
     def update(self):
-
         if self.is_moving:
             super().update()
 
@@ -66,18 +56,42 @@ class Coin(AnimatedSprite):
 
 
 
-class Bomb(pygame.sprite.Sprite):
+class Bomb(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        super().__init__(bomb_group, all_sprites)
-        self.image = load_image('bomb.png')
-        self.rect = self.image.get_rect().move(
-            TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
+        sheet = load_image_sheet('bomb8.png').convert_alpha()
+        super().__init__(sheet, 8, 1, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, bomb_group, all_sprites)
 
+    def update(self):
+        super().update()
 
-''''#отладка
+''''#отладка монет
 pygame.init()
 # Создание монеты
 coin = Coin(0, 0)
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Обновление всех спрайтов
+    all_sprites.update()
+
+    # Отрисовка всех спрайтов
+    screen.fill((0, 0, 0))
+    all_sprites.draw(screen)
+
+    pygame.display.flip()
+    clock.tick(FPS)
+
+pygame.quit()'''
+
+'''#отладка бомб
+pygame.init()
+
+# Создание бомбы
+bomb = Bomb(0, 0)
 
 running = True
 while running:
