@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(player_group, all_sprites)
         self.image = load_image('mario.png')
         self.rect = self.image.get_rect().move(
-            TILE_WIDTH * pos_x + 15, TILE_HEIGHT * pos_y + 5)
+            TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.is_moving = False
@@ -37,8 +37,8 @@ class Player(pygame.sprite.Sprite):
             if passability_map[new_y][new_x]:
                 self.pos_x = new_x
                 self.pos_y = new_y
-                self.rect.x = TILE_WIDTH * self.pos_x + 15
-                self.rect.y = TILE_HEIGHT * self.pos_y + 5
+                self.rect.x = TILE_WIDTH * self.pos_x
+                self.rect.y = TILE_HEIGHT * self.pos_y
                 self.is_moving = True
         else:
             self.is_moving = False
