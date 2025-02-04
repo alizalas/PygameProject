@@ -3,7 +3,7 @@ import sys
 from settings import screen, clock, FPS
 from utils import load_level, create_passability_map
 from level import generate_level
-from groups import tiles_group, player_group, coin_group, bomb_group
+from groups import tiles_group, player_group, coin_group, bomb_group, all_sprites
 from objects import Player
 
 # Список изображений для пола и стен
@@ -44,6 +44,7 @@ if __name__ == '__main__':
 
         # Отрисовка
         screen.fill(pygame.Color('black'))
+        all_sprites.update()
         tiles_group.draw(screen)
         player_group.draw(screen)
         coin_group.draw(screen)

@@ -21,7 +21,6 @@ class AnimatedSprite(pygame.sprite.Sprite):
                 self.frames.append(
                     sheet.subsurface(pygame.Rect(frame_location, self.rect.size))
                 )
-        print("Кадры успешно нарезаны.")  # Подтверждение нарезки кадров
 
     def update(self):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)

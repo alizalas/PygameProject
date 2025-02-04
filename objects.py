@@ -4,6 +4,10 @@ from utils import load_image, load_image_sheet
 from groups import all_sprites, tiles_group, coin_group, bomb_group, player_group
 from settings import TILE_WIDTH, TILE_HEIGHT
 from animation import AnimatedSprite
+from settings import *
+from utils import load_image_sheet
+
+
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y, floor, wall):
@@ -25,6 +29,7 @@ class Player(pygame.sprite.Sprite):
             TILE_WIDTH * pos_x + 15, TILE_HEIGHT * pos_y + 5)
         self.pos_x = pos_x
         self.pos_y = pos_y
+        self.is_moving = False
 
     def move(self, dx, dy, passability_map):
         new_x, new_y = self.pos_x + dx, self.pos_y + dy
@@ -53,12 +58,11 @@ class Player(pygame.sprite.Sprite):
             super().update()
 
 
-class Coin(pygame.sprite.Sprite):
+class Coin(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        super().__init__(coin_group, all_sprites)
-        self.image = load_image('coin.png')
-        self.rect = self.image.get_rect().move(
-            TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
+        sheet = load_image_sheet('coin64.png').convert_alpha()
+        super().__init__(sheet, 4, 4, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, coin_group, all_sprites)
+
 
 
 
@@ -68,3 +72,27 @@ class Bomb(pygame.sprite.Sprite):
         self.image = load_image('bomb.png')
         self.rect = self.image.get_rect().move(
             TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
+
+
+''''#отладка
+pygame.init()
+# Создание монеты
+coin = Coin(0, 0)
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Обновление всех спрайтов
+    all_sprites.update()
+
+    # Отрисовка всех спрайтов
+    screen.fill((0, 0, 0))
+    all_sprites.draw(screen)
+
+    pygame.display.flip()
+    clock.tick(FPS)
+
+pygame.quit()'''
