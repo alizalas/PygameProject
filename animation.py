@@ -2,8 +2,9 @@ import pygame
 from settings import *
 from utils import load_image_sheet
 
+
 class AnimatedSprite(pygame.sprite.Sprite):
-    def __init__(self, sheet, columns, rows, x, y, *groups):
+    def __init__(self, sheet, columns, rows, x, y, animation_speed=4, *groups):
         super().__init__(*groups)
         self.frames = []
         self.cut_sheet(sheet, columns, rows)
@@ -13,6 +14,9 @@ class AnimatedSprite(pygame.sprite.Sprite):
         )
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
+        self.animation_speed = animation_speed  # Скорость анимации (кадров игры на кадр анимации)
+        self.frame_counter = 0  # Счетчик кадров для управления анимацией
+
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
         for j in range(rows):
@@ -23,10 +27,14 @@ class AnimatedSprite(pygame.sprite.Sprite):
                 )
 
     def update(self):
-        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
-        self.image = pygame.transform.scale(
-            self.frames[self.cur_frame], (TILE_WIDTH, TILE_HEIGHT)
-        )
+        self.frame_counter += 1  # Увеличиваем счетчик кадров
+
+        if self.frame_counter >= self.animation_speed: # Проверяем, пора ли менять кадр
+            self.frame_counter = 0  # Сбрасываем счетчик
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = pygame.transform.scale(
+                self.frames[self.cur_frame], (TILE_WIDTH, TILE_HEIGHT)
+            )
 
 
 # Основная программа для отладки
@@ -68,6 +76,6 @@ if __name__ == "__main__":
         all_sprites.draw(screen)
 
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(FPS)
 
     pygame.quit()
