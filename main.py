@@ -4,10 +4,12 @@ from settings import screen, clock, FPS
 from utils import load_level, create_passability_map
 from level import generate_level
 from groups import tiles_group, player_group, coin_group, bomb_group, all_sprites
-from objects import Player
+from camera import Camera
 from images import *
 
+
 if __name__ == '__main__':
+    camera = Camera()
     level_map = load_level('level1.txt')
     passability_map = create_passability_map(level_map)
     player, level_x, level_y = generate_level(level_map, floor, wall)
@@ -39,13 +41,27 @@ if __name__ == '__main__':
             print("Игра окончена! Вы наступили на бомбу.")
             running = False
 
-        # Отрисовка
+        player.update()
+
+        # изменяем ракурс камеры
+        camera.update(player)
+
         screen.fill(pygame.Color('black'))
-        all_sprites.update()
-        tiles_group.draw(screen)
-        player_group.draw(screen)
-        coin_group.draw(screen)
-        bomb_group.draw(screen)
+        coin_group.update()
+        bomb_group.update()
+
+        for sprite in tiles_group:
+            screen.blit(sprite.image, camera.apply(sprite))
+        for sprite in bomb_group:
+            screen.blit(sprite.image, camera.apply(sprite))
+        for sprite in coin_group:
+            screen.blit(sprite.image, camera.apply(sprite))
+
+        for sprite in player_group:
+            screen.blit(sprite.image, camera.apply(sprite))
+
+        pygame.display.flip()
+        clock.tick(FPS)
         pygame.display.flip()
         clock.tick(FPS)
 
