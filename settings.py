@@ -2,8 +2,8 @@ import pygame
 
 # Настройки игры
 FPS = 60
-V = 6
-TILE_WIDTH = TILE_HEIGHT = 50
+V = 7
+TILE_WIDTH = TILE_HEIGHT = 60
 WIDTH, HEIGHT = 550, 550
 
 # Инициализация Pygame

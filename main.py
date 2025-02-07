@@ -48,7 +48,6 @@ if __name__ == '__main__':
 
         screen.fill(pygame.Color('black'))
         coin_group.update()
-        bomb_group.update()
 
         for sprite in tiles_group:
             screen.blit(sprite.image, camera.apply(sprite))
