@@ -1,9 +1,10 @@
 import pygame
+from pygame.locals import SHOWN
 
-from Constants import WIDTH, HEIGHT, BUTTOM_CLICKED, pictures, load_image
+from Constants import WIDTH, HEIGHT, BUTTOM_CLICKED, pictures, user_name
 from buttons import Button
 from dialogwindow import DialogWindow
-user_name = "NoName"
+
 
 class Window:
     def __init__(self, name, color):
@@ -25,6 +26,22 @@ class Window:
         image = pygame.transform.scale(image, (WIDTH, HEIGHT))
         screen.blit(image, (0, 0))
 
+    def blit_text(self, x, y, text, screen, text_size, color_text):
+        font = pygame.font.Font(None, text_size)
+        if isinstance(text, list):
+            text_coord = y
+            for line in text:
+                string_rendered = font.render(line, True, color_text)
+                intro_rect = string_rendered.get_rect()
+                text_coord += 10
+                intro_rect.top = text_coord
+                intro_rect.x = x
+                text_coord += intro_rect.height
+                screen.blit(string_rendered, intro_rect)
+        else:
+            text = font.render(text, True, color_text)
+            screen.blit(text, (x, y))
+
 
 class Main_Window(Window):
     def __init__(self, image, name, color):
@@ -44,11 +61,6 @@ class Main_Window(Window):
             for btn in self.buttongroup:
                 btn.get_click(event.pos)
 
-    def blit_text(self):
-        font = pygame.font.Font(None, 50)
-        text = font.render(f"Здравствуй, {user_name}", True, "white")
-        self.image1.blit(text, (0, 0))
-
     def show(self):
         self.open()
 
@@ -56,7 +68,7 @@ class Main_Window(Window):
         pygame.display.set_caption("Main_window")
         screen.fill(self.color)
         self.blit_image(screen, self.image)
-        self.blit_text()
+        self.blit_text(0, 0, f"Здравствуй, {user_name}", screen, 50, "white")
         screen.blit(self.image1, (0, 0, WIDTH, HEIGHT))
         all_sprites.draw(screen)
 
@@ -72,7 +84,7 @@ class New_window(Window):
     
     def draw(self, screen):
         pygame.display.set_caption(self.name)
-        intro_text = ["ИНСТРУКЦИЯ", "",
+        intro_text = ["ИНСТРУКЦИЯ",
                     "Правила игры:",
                     "-Можно ходить по коридорам, собирая монетки и избегая врагов и бомб",
                     "-Надо добраться до выхода, затратив как можно меньше времени",
@@ -80,19 +92,7 @@ class New_window(Window):
         # fon = pygame.transform.scale(self.image, (WIDTH, HEIGHT))
         screen.fill(self.color)
         self.blit_image(screen, self.image)
-        self.blit_text(screen, intro_text)
-    
-    def blit_text(self, screen, intro_text):
-        font = pygame.font.Font(None, 30)
-        text_coord = 50
-        for line in intro_text:
-            string_rendered = font.render(line, 1, pygame.Color(self.color_text))
-            intro_rect = string_rendered.get_rect()
-            text_coord += 10
-            intro_rect.top = text_coord
-            intro_rect.x = 10
-            text_coord += intro_rect.height
-            screen.blit(string_rendered, intro_rect)
+        self.blit_text(30, 50, intro_text, screen, 30, "white")
 
 
 class ChooseOfPlayer(Window):
@@ -105,9 +105,9 @@ class ChooseOfPlayer(Window):
         pygame.display.set_caption(self.name)
         screen.fill(self.color)
         for image in self.players:
-            im = load_image(image)
-            width = im.get_width()
-            screen.blit(im, (x + width, 200))
+            # im = load_image(image)
+            width = image.get_width()
+            screen.blit(image, (x + width, 200))
             x += width + 50
 
 
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
     dialog = DialogWindow("Введите имя")
     main_window = Main_Window(pictures["фон для главного"], "Main Window", (0, 255, 0))
-    window2 = ChooseOfPlayer("Выбор персонажа", (12, 0, 150), ["monster.png", "hero.png"])
+    window2 = ChooseOfPlayer("Выбор персонажа", (12, 0, 150), [pictures["монстр"], pictures["герой"]])
     window = 0
     
     new_window = New_window(pictures["фон для инструкции"], "Second Window", "cyan", "white")
@@ -137,15 +137,13 @@ if __name__ == '__main__':
                 window.process_event(event)
             if event.type == BUTTOM_CLICKED:
                 if event.window_name == "Save":
-                    screen = pygame.display.set_mode(size)
+                    name = dialog.text
+                    screen = pygame.display.set_mode(size, SHOWN)
                     pygame.display.set_caption("MAIN")
                     window = main_window
-                    name = dialog.text
                     if name:
                         user_name = name
-                    dialog.close()
                     start = True
-                    
                 elif event.window_name == "Выбор персонажа":
                     window = window2
                 elif event.window_name == "Инструкция":

@@ -8,10 +8,11 @@ WIDTH = 1000
 HEIGHT = 600
 BUTTOM_CLICKED = pygame.USEREVENT + 1
 NEW_WINDOW_EVENT = pygame.USEREVENT + 2
+user_name = "NoName"
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join("PygameProject.git/images", name)
+    fullname = os.path.join("images", name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
