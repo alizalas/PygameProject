@@ -30,7 +30,7 @@ def main(level):
         if keys[pygame.K_RIGHT]:
             player.move(1, 0, passability_map)
 
-        # Проверка сбора монет
+
         coins_collected = pygame.sprite.spritecollide(player, coin_group, True)
         if coins_collected:
             print("Монета собрана!")
@@ -66,6 +66,6 @@ def main(level):
 
 
 if __name__ == '__main__':
-    main('third_level.txt')
+    main('second_level.txt')
     pygame.quit()
     sys.exit()

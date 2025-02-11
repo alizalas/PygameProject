@@ -23,13 +23,15 @@ class Tile(pygame.sprite.Sprite):
             TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
 
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
+        attr = WITCH.get_attributes()
         super().__init__(player_group, all_sprites)
-        self.sheet = sheet_char
-        self.image_stay = image_stay_char
-        self.animated_sprite = AnimatedSprite(self.sheet, x_sheet, y_sheet, pos_x * TILE_WIDTH,
-                                              pos_y * TILE_HEIGHT)  # Анимация движения
+        self.sheet = attr['sheet']
+        self.image_stay = attr['image_stay_char']
+        self.animated_sprite = AnimatedSprite(self.sheet, attr['x_sheet'], attr['y_sheet'], pos_x * TILE_WIDTH* attr['delta_x'],
+                                              pos_y * TILE_HEIGHT* attr['delta_y'])  # Анимация движения
         self.static_sprite = pygame.sprite.Sprite()  # Статичный спрайт
         self.static_sprite.image = self.image_stay
         self.static_sprite.rect = self.image_stay.get_rect()
@@ -105,6 +107,7 @@ class Player(pygame.sprite.Sprite):
             # Отражаем спрайт, если смотрим влево
             if not self.facing_right:
                 self.image = pygame.transform.flip(self.image, True, False)
+
 
 class Coin(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
