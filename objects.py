@@ -43,7 +43,8 @@ class Player(pygame.sprite.Sprite):
         self.target_position = self.rect.center
         self.is_moving = False
         self.move_direction = None
-        self.speed = V # Скорость движения
+        self.speed = V  # Скорость движения
+        self.facing_right = True  # Направление взгляда спрайта (вправо по умолчанию)
 
     def get_center_cell_position(self, pos_x, pos_y):
         return (TILE_WIDTH * pos_x + TILE_WIDTH // 2, TILE_HEIGHT * pos_y + TILE_HEIGHT // 2)
@@ -62,6 +63,12 @@ class Player(pygame.sprite.Sprite):
                 self.move_direction = pygame.math.Vector2(self.target_position) - pygame.math.Vector2(self.rect.center)
                 if self.move_direction.length() > 0:
                     self.move_direction = self.move_direction.normalize()
+
+                # Определяем направление движения
+                if dx < 0:
+                    self.facing_right = False
+                elif dx > 0:
+                    self.facing_right = True
             else:
                 self.is_moving = False
         else:
@@ -72,6 +79,10 @@ class Player(pygame.sprite.Sprite):
             # Используем анимированный спрайт
             self.image = self.animated_sprite.image
             self.rect = self.animated_sprite.rect
+
+            # Отражаем спрайт, если движемся влево
+            if not self.facing_right:
+                self.image = pygame.transform.flip(self.image, True, False)
 
             # Обновляем позицию
             if self.move_direction:
@@ -87,11 +98,13 @@ class Player(pygame.sprite.Sprite):
                     self.move_direction = None
             self.animated_sprite.update()
         else:
-            # Используем статичный спрайт
             self.image = self.static_sprite.image
             self.rect = self.static_sprite.rect
             self.rect.center = self.get_center_cell_position(self.pos_x, self.pos_y)  # Синхронизируем позицию
 
+            # Отражаем спрайт, если смотрим влево
+            if not self.facing_right:
+                self.image = pygame.transform.flip(self.image, True, False)
 
 class Coin(AnimatedSprite):
     def __init__(self, pos_x, pos_y):

@@ -7,10 +7,9 @@ from groups import tiles_group, player_group, coin_group, bomb_group, all_sprite
 from camera import Camera
 from images import *
 
-
-if __name__ == '__main__':
+def main(level):
     camera = Camera()
-    level_map = load_level('level1.txt')
+    level_map = load_level(level)
     passability_map = create_passability_map(level_map)
     player, level_x, level_y = generate_level(level_map, floor, wall)
 
@@ -65,5 +64,8 @@ if __name__ == '__main__':
         pygame.display.flip()
         clock.tick(FPS)
 
+
+if __name__ == '__main__':
+    main('third_level.txt')
     pygame.quit()
     sys.exit()

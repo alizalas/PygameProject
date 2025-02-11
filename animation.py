@@ -76,6 +76,6 @@ if __name__ == "__main__":
         all_sprites.draw(screen)
 
         pygame.display.flip()
-        clock.tick(FPS)
+        clock.tick(40)
 
     pygame.quit()
