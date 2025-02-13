@@ -30,8 +30,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__(player_group, all_sprites)
         self.sheet = attr['sheet']
         self.image_stay = attr['image_stay_char']
-        self.animated_sprite = AnimatedSprite(self.sheet, attr['x_sheet'], attr['y_sheet'], pos_x * TILE_WIDTH* attr['delta_x'],
-                                              pos_y * TILE_HEIGHT* attr['delta_y'])  # Анимация движения
+        self.animated_sprite = AnimatedSprite(self.sheet, attr['x_sheet'], attr['y_sheet'], pos_x * TILE_WIDTH,
+                                              pos_y * TILE_HEIGHT)  # Анимация движения
         self.static_sprite = pygame.sprite.Sprite()  # Статичный спрайт
         self.static_sprite.image = self.image_stay
         self.static_sprite.rect = self.image_stay.get_rect()
