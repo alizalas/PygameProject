@@ -1,11 +1,11 @@
 from utils import load_image_sheet, load_image
 from animation import AnimatedSprite
 
-coin_image = 'coin64.png'
-bomb_image = 'bomb8.png'
+coin_image = load_image_sheet('coin64.png')
+bomb_image = load_image_sheet('bomb8.png')
 
-floor = ['floor1.png', 'floor4.png', 'floor5.png']
-wall = ['wall1.png']
+floor = [load_image('floor1.png'), load_image('floor4.png'), load_image('floor5.png')]
+wall = [load_image('wall1.png')]
 heart = load_image('heart.png')
 broken_heart = load_image('broken_heart.png')
 

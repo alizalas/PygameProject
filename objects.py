@@ -16,9 +16,9 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y, floor, wall):
         super().__init__(tiles_group, all_sprites)
         if tile_type == 'empty':
-            self.image = load_image(random.choice(floor))
+            self.image = random.choice(floor)
         else:
-            self.image = load_image(random.choice(wall))
+            self.image = random.choice(wall)
         self.rect = self.image.get_rect().move(
             TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
 
@@ -111,7 +111,7 @@ class Player(pygame.sprite.Sprite):
 
 class Coin(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        sheet = load_image_sheet(coin_image).convert_alpha()
+        sheet = coin_image
         super().__init__(sheet, 4, 4, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, 4, all_sprites, coin_group)
 
 
@@ -119,7 +119,7 @@ class Coin(AnimatedSprite):
 
 class Bomb(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        sheet = load_image_sheet(bomb_image).convert_alpha()
+        sheet = bomb_image
         super().__init__(sheet, 8, 1, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, 4, all_sprites, bomb_group)
 
     def update(self):
