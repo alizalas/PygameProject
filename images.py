@@ -6,7 +6,8 @@ bomb_image = 'bomb8.png'
 
 floor = ['floor1.png', 'floor4.png', 'floor5.png']
 wall = ['wall1.png']
-
+heart = load_image('heart.png')
+broken_heart = load_image('broken_heart.png')
 
 
 

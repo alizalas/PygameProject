@@ -6,12 +6,16 @@ from level import generate_level
 from groups import tiles_group, player_group, coin_group, bomb_group, all_sprites
 from camera import Camera
 from images import *
+from lives import Lives
+
+
 
 def main(level):
     camera = Camera()
     level_map = load_level(level)
     passability_map = create_passability_map(level_map)
     player, level_x, level_y = generate_level(level_map, floor, wall)
+    lives = Lives()
 
     running = True
     while running:
@@ -30,15 +34,17 @@ def main(level):
         if keys[pygame.K_RIGHT]:
             player.move(1, 0, passability_map)
 
-
         coins_collected = pygame.sprite.spritecollide(player, coin_group, True)
         if coins_collected:
             print("Монета собрана!")
 
         # Проверка столкновения с бомбой
         if pygame.sprite.spritecollideany(player, bomb_group):
-            print("Игра окончена! Вы наступили на бомбу.")
-            running = False
+            lives.decrease()
+            if lives.is_game_over():
+                print("Игра окончена! Жизни закончились")
+                running = False
+
 
         player.update()
 
@@ -59,11 +65,11 @@ def main(level):
         for sprite in player_group:
             screen.blit(sprite.image, camera.apply(sprite))
 
-        pygame.display.flip()
-        clock.tick(FPS)
-        pygame.display.flip()
-        clock.tick(FPS)
+        # Отрисовка жизней
+        lives.draw(screen)
 
+        pygame.display.flip()
+        clock.tick(FPS)
 
 if __name__ == '__main__':
     main('second_level.txt')
