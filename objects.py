@@ -25,8 +25,8 @@ class Tile(pygame.sprite.Sprite):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
-        attr = WITCH.get_attributes()
+    def __init__(self, pos_x, pos_y, char):
+        attr = char.get_attributes()
         super().__init__(player_group, all_sprites)
         self.sheet = attr['sheet']
         self.image_stay = attr['image_stay_char']

@@ -40,10 +40,10 @@ WITCH = char_animation(1, 8, image_stay_char, sheet_char, 3)
 sheet_char = load_image_sheet('girl.png').convert_alpha()
 image_stay_char = load_image('girl_stay.png')
 
-GIRL = char_animation(7, 1, image_stay_char, sheet_char, 1)
+GIRL = char_animation(8, 1, image_stay_char, sheet_char, 1)
 
 
 sheet_char = load_image_sheet('knight.png').convert_alpha()
 image_stay_char = load_image('knight_stay.png')
 
-KNIGHT = char_animation(8, 1, image_stay_char, sheet_char, 1)
+KNIGHT = char_animation(4, 1, image_stay_char, sheet_char, 1)
