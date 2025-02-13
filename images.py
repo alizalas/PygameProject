@@ -9,6 +9,8 @@ wall = [load_image('wall1.png')]
 heart = load_image('heart.png')
 broken_heart = load_image('broken_heart.png')
 
+dragon = load_image_sheet('dragon.png')
+
 
 
 class char_animation:

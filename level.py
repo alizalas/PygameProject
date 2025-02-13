@@ -1,4 +1,4 @@
-from objects import Player, Coin, Bomb, Tile
+from objects import *
 from images import *
 
 char = GIRL
@@ -18,6 +18,10 @@ def generate_level(level, floor, wall):
             elif level[y][x] == 'c':  # Монета
                 Tile('empty', x, y, floor, wall)
                 Coin(x, y)
+            elif level[y][x] == 'e':
+                Tile('empty', x, y, floor, wall)
+                enemy = FlyingEnemy(5, 5)
+
             elif level[y][x] == 'b':  # Бомба
                 Tile('empty', x, y, floor, wall)
                 Bomb(x, y)
