@@ -19,6 +19,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 def load_image(name, change=False):
+    # if name == "cave.png":
+    #     print("Загрузил")
     fullname = os.path.join("images", name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
@@ -31,7 +33,19 @@ def load_image(name, change=False):
 pictures = {"фон для инструкции": load_image("cave.png"),
             "фон для главного" : load_image("fon.png"),
             "монстр": load_image("monster.png"),
-            "герой": load_image("hero.png")}
+            "герой": load_image("hero.png"),
+            "heart" : load_image('heart.png', True),
+            "broken heart": load_image('broken_heart.png', True),
+            "dragon" : load_image('dragon.png'),
+            "witch_stay": pygame.transform.scale(load_image('witch_stay.png'), (320, 440)),
+            "witch_player" : load_image('witch_stay.png', True),
+            "witch": load_image('witch.png'),
+            "girl_stay": pygame.transform.scale(load_image("girl_stay.png"), (319, 371)),
+            "girl_player" : load_image("girl_stay.png", True),
+            "girl": load_image("girl.png"),
+            "knight_stay" : pygame.transform.scale(load_image("knight_stay.png"), (340, 400)),
+            "knight_player" : load_image("knight_stay.png", True),
+            "knight": load_image("knight.png")}
 
 
 coin_image = 'coin64.png'
@@ -39,6 +53,9 @@ bomb_image = 'bomb8.png'
 
 floor = ['floor1.png', 'floor4.png', 'floor5.png']
 wall = ['wall1.png']
+heart = load_image('heart.png', True)
+broken_heart = load_image('broken_heart.png', True)
+dragon = load_image('dragon.png')
 
 sheet_char = load_image('witch.png')
 x_sheet, y_sheet = 1, 8# Спрайт-лист для анимации движения
@@ -51,3 +68,5 @@ player_group = pygame.sprite.Group()
 coin_group = pygame.sprite.Group()
 bomb_group = pygame.sprite.Group()
 far_walls = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
+button_group = pygame.sprite.Group()

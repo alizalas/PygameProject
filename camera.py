@@ -1,4 +1,4 @@
-from Constants import screen, clock, FPS, WIDTH, HEIGHT
+from Constants import WIDTH, HEIGHT
 
 
 class Camera:

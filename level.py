@@ -1,4 +1,4 @@
-from levels import Player, Coin, Bomb, Tile
+from levels import Player, Coin, Bomb, Tile, FlyingEnemy
 from Constants import far_walls
 
 
@@ -16,6 +16,9 @@ def generate_level(level, floor, wall):
             elif level[y][x] == '@':
                 Tile('empty', x, y, floor, wall)
                 new_player = Player(x, y)
+            elif level[y][x] == 'e':
+                Tile('empty', x, y, floor, wall)
+                FlyingEnemy(x, y)
             elif level[y][x] == 'c':  # Монета
                 Tile('empty', x, y, floor, wall)
                 Coin(x, y)
