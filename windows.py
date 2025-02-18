@@ -1,6 +1,6 @@
 import pygame
 
-from Constants import WIDTH, HEIGHT, BUTTOM_CLICKED, pictures
+from Constants import WIDTH, HEIGHT, BUTTOM_CLICKED, CHOOSE_EVENT, pictures
 from dialogwindow import DialogWindow
 from Constants import tiles_group, coin_group, bomb_group, all_sprites, player_group, enemy_group, FPS
 from hearts import Lives
@@ -13,8 +13,8 @@ if __name__ == '__main__':
     pygame.init()
     size = WIDTH, HEIGHT
     start = False
+    
     clock = pygame.time.Clock()
-    user_name = "NoName"
     lives = Lives()
     # camera = Camera()
     button_group = pygame.sprite.Group()
@@ -26,6 +26,7 @@ if __name__ == '__main__':
     
     new_window = New_window(pictures["фон для инструкции"], "Second Window", "cyan", "white")
     play_window = 1
+    player = "WITCH"
     game = True
     while game:
         for event in pygame.event.get():
@@ -40,7 +41,7 @@ if __name__ == '__main__':
                     pygame.display.set_caption("MAIN")
                     window = main_window
                     if name:
-                        user_name = name
+                        main_window.change_name(name)
                     start = True
                 elif event.window_name == "Выбор персонажа":
                     window = window2
@@ -48,16 +49,21 @@ if __name__ == '__main__':
                     window = new_window
                 elif event.window_name == "Level 1":
                     play_window = PlayWindow("Level №1", "black", "first_level.txt")
-                    print(play_window.player.pos_x, play_window.player.pos_y)
+                    play_window.change_player(player)
+                    # print(play_window.player.pos_x, play_window.player.pos_y)
                     window = play_window
                 elif event.window_name == "Level 2":
                     play_window = PlayWindow("Level №2", "black", "second_level.txt")
-                    print(play_window.player.pos_x, play_window.player.pos_y)
+                    play_window.change_player(player)
+                    # print(play_window.player.pos_x, play_window.player.pos_y)
                     window = play_window
                 elif event.window_name == "Level 3":
                     play_window = PlayWindow("Level №3", "black", "third_level.txt")
-                    print(play_window.player.pos_x, play_window.player.pos_y)
+                    play_window.change_player(player)
+                    # print(play_window.player.pos_x, play_window.player.pos_y)
                     window = play_window
+            if event.type == CHOOSE_EVENT:
+                player = event.btn
             if not start:
                 dialog.process_event(event)
             

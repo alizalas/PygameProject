@@ -1,9 +1,10 @@
 import pygame
-from Constants import WIDTH, HEIGHT, all_sprites, tiles_group, player_group, coin_group, bomb_group, user_name, floor, wall, pictures
-from buttons import Button
+from Constants import WIDTH, HEIGHT, all_sprites, tiles_group, player_group, coin_group, bomb_group, floor, wall, enemy_group, RADIO_BUTTON_CLICKED, CHOOSE_EVENT
+from buttons import Button, RadioButton
 from utils import create_passability_map, load_level
 from level import generate_level
 from camera import Camera
+from Players import WITCH, GIRL, KNIGHT
 
 
 
@@ -47,6 +48,7 @@ class Window:
 class Main_Window(Window):
     def __init__(self, image, name, color):
         super().__init__(name, color)
+        self.user_name = "NoName"
         self.button = Button(100, 100, (255, 0, 255), "Инструкция", (90, 60), all_sprites)
         self.btn_r = Button(200, 100, (255, 0, 255), "Рейтинг", (90, 60), all_sprites)
         self.btn_choose = Button(300, 100, (255, 0, 255), "Выбор персонажа", (200, 60), all_sprites)
@@ -62,11 +64,14 @@ class Main_Window(Window):
             for btn in self.buttongroup:
                 btn.get_click(event.pos)
 
+    def change_name(self, name):
+        self.user_name = name
+
     def draw(self, screen):
         pygame.display.set_caption("Main_window")
         screen.fill(self.color)
         self.blit_image(screen, self.image)
-        self.blit_text(0, 0, f"Здравствуй, {user_name}", screen, 50, "white")
+        self.blit_text(0, 0, f"Здравствуй, {self.user_name}", screen, 50, "white")
         # screen.blit(self.image1, (0, 0, WIDTH, HEIGHT))
         self.buttongroup.draw(screen)
 
@@ -100,16 +105,29 @@ class PlayWindow(Window):
         self.level_map = load_level(level)
         self.passability_map = create_passability_map(self.level_map)
         self.player, self.x, self.y = generate_level(self.level_map, floor, wall)
+        self.player_name = WITCH
         self.camera = Camera()
 
     def process_event(self, event):
         if event.type == pygame.QUIT:
-            # player_group.empty()
-            # coin_group.empty()
-            # bomb_group.empty()
-            # enemy_group.empty()
-            # tiles_group.empty()
-           all_sprites.empty()
+            player_group.empty()
+            coin_group.empty()
+            bomb_group.empty()
+            enemy_group.empty()
+            tiles_group.empty()
+        
+        #    all_sprites.empty()
+        #    player_group.empty()
+    
+    def change_player(self, name):
+        print("Зашел")
+        if name == "WITCH":
+            self.player_name = WITCH
+        elif name == "GIRL":
+            self.player_name = GIRL
+        elif name == "KNIGHT":
+            self.player_name = KNIGHT
+        self.player.change_image(self.player_name)
 
     def draw(self, screen):
         screen.fill((0, 0, 0))
@@ -137,14 +155,40 @@ class PlayWindow(Window):
 
 
 class ChooseOfPlayer(Window):
+    signal = CHOOSE_EVENT
     def __init__(self, name, color, players):
         super().__init__(name, color)
         self.players = players
+        self.btn_group = pygame.sprite.Group()
+        self.button_witch = RadioButton(150, HEIGHT - 50, 20, (230, 27, 150), "WITCH", True, self.btn_group)
+        self.button_supergirl = RadioButton(470, HEIGHT - 50, 20, (180, 100, 150), "GIRL", False, self.btn_group)
+        self.button_knight = RadioButton(750, HEIGHT - 50, 20, (30, 200, 150), "KNIGHT", False, self.btn_group)
+
+    def process_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for btn in self.btn_group:
+                btn.get_click(event.pos)
+
+        elif event.type == RADIO_BUTTON_CLICKED:
+                for btn in self.btn_group:
+                    btn.clicked = False
+                    btn.change()
+                event.btn.clicked = True
+                event.btn.change()
+
+        elif event.type == pygame.QUIT:
+            for i in self.btn_group:
+                if i.clicked:
+                    event1 = pygame.event.Event(CHOOSE_EVENT, {'btn': i.text})
+                    pygame.event.post(event1)
+                    break
+
 
     def draw(self, screen):
         x = 50
         pygame.display.set_caption(self.name)
         screen.fill(self.color)
+        self.btn_group.draw(screen)
         for image in self.players:
             # im = load_image(image)
             width = image.get_width() - 50

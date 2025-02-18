@@ -3,7 +3,7 @@ import random
 
 from utils import load_image
 from animation import AnimatedSprite
-from Constants import TILE_HEIGHT, TILE_WIDTH, dragon, enemy_group, sheet_char, x_sheet, y_sheet, coin_image, bomb_image, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
+from Constants import TILE_HEIGHT, TILE_WIDTH, dragon, enemy_group, coin_image, bomb_image, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
 from Players import GIRL, WITCH, KNIGHT
 
 class Tile(pygame.sprite.Sprite):
@@ -18,7 +18,7 @@ class Tile(pygame.sprite.Sprite):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, char=KNIGHT):
+    def __init__(self, pos_x, pos_y, char=WITCH):
         attr = char.get_attributes()
         super().__init__(player_group, all_sprites)
         self.sheet = attr['sheet']
@@ -43,6 +43,21 @@ class Player(pygame.sprite.Sprite):
 
     def get_center_cell_position(self, pos_x, pos_y):
         return (TILE_WIDTH * pos_x + TILE_WIDTH // 2, TILE_HEIGHT * pos_y + TILE_HEIGHT // 2)
+    
+    def change_image(self, char):
+        print("Change")
+        attr = char.get_attributes()
+        self.sheet = attr['sheet']
+        self.image_stay = attr['image_stay_char']
+        self.animated_sprite = AnimatedSprite(self.sheet, attr['x_sheet'], attr['y_sheet'], self.pos_x * TILE_WIDTH,
+                                              self.pos_y * TILE_HEIGHT) 
+        self.static_sprite = pygame.sprite.Sprite()  
+        self.static_sprite.image = self.image_stay
+        self.static_sprite.rect = self.image_stay.get_rect()
+        self.image = self.static_sprite.image
+        self.rect = self.image.get_rect()
+        self.rect.center = self.get_center_cell_position(self.pos_x, self.pos_y)
+        self.target_position = self.rect.center
 
     def move(self, dx, dy, passability_map):
         if self.is_moving:
