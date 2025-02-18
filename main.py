@@ -1,6 +1,4 @@
-
 from level import generate_level
-
 import pygame
 import sys
 from settings import screen, clock, FPS
@@ -12,8 +10,10 @@ from images import *
 from lives import Lives
 from mask import create_fog_mask
 
+
 def win():
     ...
+
 
 def main(level, all_coins):
     camera = Camera()
@@ -26,6 +26,10 @@ def main(level, all_coins):
     collected_coins = 0
     lives = Lives()
 
+    # Инициализация таймера
+    start_time = pygame.time.get_ticks()
+
+    font = pygame.font.Font("FSEX300.ttf", 36)
     running = True
     while running:
         for event in pygame.event.get():
@@ -99,15 +103,31 @@ def main(level, all_coins):
             screen.blit(sprite.image, camera.apply(sprite))
 
         screen.blit(fog_mask, (0, 0))
+
         # Отрисовка жизней
         lives.draw(screen)
 
-        # Создание маски тумана
+        # Расчет времени
+        current_time = (pygame.time.get_ticks() - start_time) // 1000  # В секундах
+        minutes = current_time // 60
+        seconds = current_time % 60
 
+        # Форматирование времени
+        time_text = f"Time: {minutes:02d}:{seconds:02d}"
+        time_surface = font.render(time_text, True, (255, 255, 255))  # Белый цвет
+
+        # Отображение количества монет
+        coins_text = f"Coins: {collected_coins}/{all_coins}"
+        coins_surface = font.render(coins_text, True, (255, 255, 255))  # Белый цвет
+
+        # Отрисовка статистики в правом верхнем углу
+        screen.blit(time_surface, (screen.get_width() - time_surface.get_width() - 10, 10))
+        screen.blit(coins_surface, (screen.get_width() - coins_surface.get_width() - 10, 50))
 
         # Обновление экрана
         pygame.display.flip()
         clock.tick(FPS)
+
 
 if __name__ == '__main__':
     main('second_level.txt', 6)
