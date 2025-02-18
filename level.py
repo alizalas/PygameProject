@@ -1,7 +1,7 @@
 from objects import *
 from images import *
 
-char = GIRL
+char = KNIGHT
 
 
 def generate_level(level, floor, wall):

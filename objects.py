@@ -137,14 +137,15 @@ class FlyingEnemy(AnimatedSprite):
         self.target_position = self.rect.center
         self.is_moving = False
         self.move_direction = None
-        self.speed = 15  # Скорость движения
-        self.move_cooldown = 0  # Задержка перед следующим движением
+        self.speed = 5  # Скорость движения
+        self.move_cooldown = 5  # Задержка перед следующим движением
 
     def get_center_cell_position(self, pos_x, pos_y):
         return (TILE_WIDTH * pos_x + TILE_WIDTH // 2, TILE_HEIGHT * pos_y + TILE_HEIGHT // 2)
 
     def choose_random_direction(self):
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # Вниз, вверх, вправо, влево
+        x = random.randint(-3, 3)
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (0, 2), (0, -2), (2, 0), (-2, 0)]  # Вниз, вверх, вправо, влево
         return random.choice(directions)
 
     def move(self):

@@ -9,14 +9,15 @@ from objects import Tile, Player, Coin, Bomb, FlyingEnemy
 from groups import tiles_group, player_group, coin_group, bomb_group, enemy_group, all_sprites
 from camera import Camera
 from images import *
-from lives import Lives  # Предположим, что Lives реализован в отдельном файле lives.py
+from lives import Lives
+from mask import create_fog_mask
 
 
 def main(level):
     camera = Camera()
     level_map = load_level(level)
     passability_map = create_passability_map(level_map)
-
+    fog_mask = create_fog_mask(radius=200)
     # Генерация уровня
     player, level_x, level_y = generate_level(level_map, floor, wall)
 
@@ -92,13 +93,16 @@ def main(level):
         for sprite in player_group:
             screen.blit(sprite.image, camera.apply(sprite))
 
+        screen.blit(fog_mask, (0, 0))
         # Отрисовка жизней
         lives.draw(screen)
+
+        # Создание маски тумана
+
 
         # Обновление экрана
         pygame.display.flip()
         clock.tick(FPS)
-
 
 if __name__ == '__main__':
     main('second_level.txt')
