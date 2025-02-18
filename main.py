@@ -12,16 +12,18 @@ from images import *
 from lives import Lives
 from mask import create_fog_mask
 
+def win():
+    ...
 
-def main(level):
+def main(level, all_coins):
     camera = Camera()
     level_map = load_level(level)
     passability_map = create_passability_map(level_map)
     fog_mask = create_fog_mask(radius=200)
-    # Генерация уровня
+
     player, level_x, level_y = generate_level(level_map, floor, wall)
 
-    # Инициализация системы жизней
+    collected_coins = 0
     lives = Lives()
 
     running = True
@@ -45,6 +47,9 @@ def main(level):
         coins_collected = pygame.sprite.spritecollide(player, coin_group, True)
         if coins_collected:
             print("Монета собрана!")
+            collected_coins += 1
+            if collected_coins == all_coins:
+                win()
 
         # Проверка столкновения с бомбой
         if pygame.sprite.spritecollideany(player, bomb_group):
@@ -105,6 +110,6 @@ def main(level):
         clock.tick(FPS)
 
 if __name__ == '__main__':
-    main('second_level.txt')
+    main('second_level.txt', 6)
     pygame.quit()
     sys.exit()
