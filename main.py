@@ -66,9 +66,11 @@ def main(level, all_coins):
 
         # Проверка столкновения с врагом
         if pygame.sprite.spritecollideany(player, enemy_group):
-            print("Игрок погиб от врага!")
-            running = False
-
+            lives.decrease()
+            if lives.is_game_over():
+                running = False
+            else:
+                print(f"Осталось жизней: {lives.lives}")
         # Обновление всех объектов
         player.update()
         for enemy in enemy_group:
@@ -130,6 +132,6 @@ def main(level, all_coins):
 
 
 if __name__ == '__main__':
-    main('second_level.txt', 6)
+    main('first_level.txt', 5)
     pygame.quit()
     sys.exit()
