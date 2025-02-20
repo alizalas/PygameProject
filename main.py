@@ -38,13 +38,13 @@ def main(level, all_coins):
 
         # Управление игроком
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             player.move(0, 1, passability_map)
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             player.move(0, -1, passability_map)
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             player.move(-1, 0, passability_map)
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             player.move(1, 0, passability_map)
 
         # Проверка сбора монет
@@ -132,6 +132,6 @@ def main(level, all_coins):
 
 
 if __name__ == '__main__':
-    main('first_level.txt', 5)
+    main('second_level.txt', 11)
     pygame.quit()
     sys.exit()
