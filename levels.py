@@ -3,8 +3,8 @@ import random
 
 from utils import load_image
 from animation import AnimatedSprite
-from Constants import TILE_HEIGHT, TILE_WIDTH, dragon, enemy_group, coin_image, bomb_image, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
-from Players import GIRL, WITCH, KNIGHT
+from Constants import TILE_HEIGHT, TILE_WIDTH, pictures, enemy_group, coin_image, bomb_image, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
+from Players import WITCH
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y, floor, wall):
@@ -133,16 +133,18 @@ class Bomb(AnimatedSprite):
 
 
 class FlyingEnemy(AnimatedSprite):
-    def __init__(self, pos_x, pos_y):
-        sheet = dragon  # Используем изображение дракона
+    def __init__(self, pos_x, pos_y, level_width, level_height):
+        sheet = pictures["dragon"] # Используем изображение дракона
         super().__init__(sheet, 7, 1, pos_x * TILE_WIDTH, pos_y * TILE_HEIGHT, 4, all_sprites, enemy_group)
         self.pos_x = pos_x
         self.pos_y = pos_y
+        self.level_width = level_width  # Ширина уровня в клетках
+        self.level_height = level_height  # Высота уровня в клетках
         self.rect.center = self.get_center_cell_position(pos_x, pos_y)
         self.target_position = self.rect.center
         self.is_moving = False
         self.move_direction = None
-        self.speed = 15  # Скорость движения
+        self.speed = V  # Скорость движения
         self.move_cooldown = 0  # Задержка перед следующим движением
 
     def get_center_cell_position(self, pos_x, pos_y):
@@ -157,11 +159,18 @@ class FlyingEnemy(AnimatedSprite):
             return
 
         dx, dy = self.choose_random_direction()
-        self.target_position = (self.rect.centerx + dx * TILE_WIDTH, self.rect.centery + dy * TILE_HEIGHT)
-        self.is_moving = True
-        self.move_direction = pygame.math.Vector2(self.target_position) - pygame.math.Vector2(self.rect.center)
-        if self.move_direction.length() > 0:
-            self.move_direction = self.move_direction.normalize()
+        new_x = self.pos_x + dx
+        new_y = self.pos_y + dy
+
+        # Проверка, чтобы враг не вылетал за пределы уровня
+        if 0 <= new_x < self.level_width and 0 <= new_y < self.level_height:
+            self.pos_x = new_x
+            self.pos_y = new_y
+            self.target_position = self.get_center_cell_position(self.pos_x, self.pos_y)
+            self.is_moving = True
+            self.move_direction = pygame.math.Vector2(self.target_position) - pygame.math.Vector2(self.rect.center)
+            if self.move_direction.length() > 0:
+                self.move_direction = self.move_direction.normalize()
 
     def update(self):
         super().update()  # Обновляем анимацию
@@ -182,9 +191,6 @@ class FlyingEnemy(AnimatedSprite):
             # Если враг не движется, выбираем новое направление через случайный интервал
             if self.move_cooldown <= 0:
                 self.move()
-                self.move_cooldown = random.randint(3, 7)  # Случайная задержка перед следующим движением
+                self.move_cooldown = random.randint(0, 0)  # Случайная задержка перед следующим движением
             else:
                 self.move_cooldown -= 1
-
-
-            

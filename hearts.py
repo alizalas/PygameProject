@@ -63,15 +63,15 @@ from Constants import TILE_HEIGHT, TILE_WIDTH, WIDTH, HEIGHT
 
 
 
-from Constants import heart, broken_heart
+from Constants import pictures
 import time
 
 class Lives:
     def __init__(self, initial_lives=3):
         self.lives = initial_lives
         self.font = pygame.font.Font(None, 36)
-        self.heart_image = heart
-        self.dark_heart_image = broken_heart
+        self.heart_image = pictures["heart"]
+        self.dark_heart_image = pictures["broken_heart"]
         self.last_decrease_time = 0
 
     def decrease(self):
