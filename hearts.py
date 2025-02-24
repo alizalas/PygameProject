@@ -66,6 +66,9 @@ from Constants import TILE_HEIGHT, TILE_WIDTH, WIDTH, HEIGHT
 from Constants import pictures
 import time
 
+from sounds import playing_sound_file
+
+
 class Lives:
     def __init__(self, initial_lives=3):
         self.lives = initial_lives
@@ -86,6 +89,9 @@ class Lives:
             if i < self.lives:
                 screen.blit(self.heart_image, (10 + i * 40, 10))
             else:
+
+                # playing_sound_file("sounds/zvuk-poteri-ochkov-v-igre.mp3")
+
                 screen.blit(self.dark_heart_image, (10 + i * 40, 10))
 
     def is_game_over(self):

@@ -1,6 +1,7 @@
 import pygame
 import random
 
+from sounds import playing_sound_file
 from utils import load_image
 from animation import AnimatedSprite
 from Constants import TILE_HEIGHT, TILE_WIDTH, pictures, enemy_group, coin_image, bomb_image, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
@@ -80,6 +81,9 @@ class Player(pygame.sprite.Sprite):
                 elif dx > 0:
                     self.facing_right = True
             else:
+
+                playing_sound_file("sounds/zvuk-udara-o-stenku.mp3")
+
                 self.is_moving = False
         else:
             self.is_moving = False

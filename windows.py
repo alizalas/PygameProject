@@ -5,6 +5,7 @@ from dialogwindow import DialogWindow
 from Constants import FPS
 from mask import create_fog_mask
 from class_windows import Main_Window, New_window, ChooseOfPlayer, PlayWindow, play, Result
+from sounds import playing_sound_file
 
 
 
@@ -34,6 +35,9 @@ if __name__ == '__main__':
                 window.process_event(event)
             if event.type == BUTTOM_CLICKED:
                 print("Нажата", event.window_name)
+
+                playing_sound_file("sounds/zvuk-najatiya-klavishi.mp3")
+
                 if event.window_name == "Save" and not start:
                     name = dialog.text
                     screen = pygame.display.set_mode(size)
@@ -58,6 +62,9 @@ if __name__ == '__main__':
                         play_window = PlayWindow("Level 3", "black", "third_level.txt")
                     play_window.change_player(player)
                     window = play_window
+
+                    playing_sound_file("sounds/zvuk-nachala-igry.mp3")
+
             if event.type == CHOOSE_EVENT:
                 player = event.btn
             if not start:

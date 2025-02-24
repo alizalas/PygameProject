@@ -1,6 +1,6 @@
 import pygame
 from Constants import BUTTOM_CLICKED, WIDTH, HEIGHT, RADIO_BUTTON_CLICKED
-
+from sounds import playing_sound_file
 
 
 class Button_Parent(pygame.sprite.Sprite):
@@ -65,7 +65,9 @@ class RadioButton(Button_Parent):
             self.change()
             event = pygame.event.Event(RADIO_BUTTON_CLICKED, {'btn': self})
             pygame.event.post(event)
-    
+
+            playing_sound_file("sounds/zvuk-najatiya-radiobutton.mp3")
+
     def change(self):
         self.image.fill((0, 0, 0))
         pygame.draw.circle(self.image, self.color, (self.radius, self.radius), self.radius, 2)

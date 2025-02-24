@@ -1,6 +1,7 @@
 import pygame
 from Constants import WIDTH, HEIGHT, tiles_group, player_group, coin_group, bomb_group, floor, wall, enemy_group
 from buttons import Button, RadioButton
+from sounds import playing_sound_file
 from utils import create_passability_map, load_level
 from level import generate_level
 from camera import Camera
@@ -217,9 +218,12 @@ class Result(Window):
         if result:
             self.image = pygame.transform.scale(pictures["win"], (WIDTH, HEIGHT))
             self.color_btn = (100, 90, 50)
+            self.sound = "sounds/zvuk-pobedy.mp3"
         else:
             self.image = pygame.transform.scale(pictures["game_over"], (WIDTH, HEIGHT))
             self.color_btn = (155, 165, 200)
+            self.sound = "sounds/zvuk-game-over.mp3"
+
         self.btn_group = pygame.sprite.Group()
         self.btn = Button(WIDTH // 2 - 75, 500, self.color_btn, "Return to main", (150, 40), self.btn_group)
         # self.btn_group.add(self.btn)
@@ -276,12 +280,16 @@ def play(play_window, screen, fog_mask, game):
         play_window.collected_coins += 1
         game = not (play_window.collected_coins == play_window.all_coins_for_level)
 
-            # Проверка столкновения с бомбой и врагом
+        playing_sound_file("sounds/zvuk-sobiraniya-monetki.mp3")
+
+        # Проверка столкновения с бомбой и врагом
     if pygame.sprite.spritecollideany(play_window.player, bomb_group) or pygame.sprite.spritecollideany(play_window.player, enemy_group):
         play_window.lives.decrease()
         if play_window.lives.is_game_over():
             print("Игра окончена! Вы наступили на бомбу.")
             game = False
+
+        playing_sound_file("sounds/zvuk-sobiraniya-monetki.mp3")
         # else:
             # print(f"Осталось жизней: {lives.lives}")
 
