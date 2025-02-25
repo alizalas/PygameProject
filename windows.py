@@ -19,7 +19,7 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
     dialog = DialogWindow("Введите имя")
     main_window = Main_Window(pictures["фон для главного"], "Main Window", (0, 255, 0))
-    window2 = ChooseOfPlayer("Выбор персонажа", (12, 0, 150), [pictures["witch_stay"], pictures["girl_stay"], pictures["knight_stay"]])
+    window2 = ChooseOfPlayer("Выбор персонажа", pictures["выбор"], (12, 0, 150), [pictures["witch_stay"], pictures["girl_stay"], pictures["knight_stay"]])
     window = 0
     new_window = New_window(pictures["фон для инструкции"], "Second Window", "cyan", "white")
     database = SQLiteDatabase(database_name)

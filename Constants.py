@@ -54,7 +54,8 @@ pictures = {"фон для инструкции": load_image("cave.png"),
             "wall": ['wall1.png'],
             "bomb": 'bomb8.png',
             "coin": 'coin64.png',
-            "рейтинг": pygame.transform.scale(load_image("rating.jpg"), (WIDTH, HEIGHT))}
+            "рейтинг": load_image("rating.jpg"),
+            "выбор": load_image("objects.jpg")}
 
 
 text_for_windows = {"инструкция": ["ИНСТРУКЦИЯ",

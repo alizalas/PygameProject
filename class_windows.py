@@ -193,8 +193,9 @@ class PlayWindow(Window):
 
 class ChooseOfPlayer(Window):
     signal = CHOOSE_EVENT
-    def __init__(self, name, color, players):
+    def __init__(self, name, image_name, color, players):
         super().__init__(name, color)
+        self.image = image_name
         self.players = players
         self.button_witch = RadioButton(150, HEIGHT - 50, 20, (230, 27, 150), "WITCH", True, self.btn_group)
         self.button_supergirl = RadioButton(470, HEIGHT - 50, 20, (180, 100, 150), "GIRL", False, self.btn_group)
@@ -224,6 +225,7 @@ class ChooseOfPlayer(Window):
         x = 50
         pygame.display.set_caption(self.name)
         screen.fill(self.color)
+        self.blit_image(screen, self.image)
         self.btn_group.draw(screen)
         for image in self.players:
             # im = load_image(image)
