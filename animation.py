@@ -1,6 +1,6 @@
 import pygame
-from Constants import *
-from utils import load_image
+from Constants import TILE_HEIGHT, TILE_WIDTH
+# from utils import load_image
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
@@ -37,45 +37,45 @@ class AnimatedSprite(pygame.sprite.Sprite):
             )
 
 
-# Основная программа для отладки
-if __name__ == "__main__":
-    pygame.init()
+# # Основная программа для отладки
+# if __name__ == "__main__":
+#     pygame.init()
 
-    # Константы (замените на реальные значения из settings)
-    TILE_WIDTH = 128
-    TILE_HEIGHT = 128
-    SCREEN_WIDTH, SCREEN_HEIGHT = 200, 200
+#     # Константы (замените на реальные значения из settings)
+#     TILE_WIDTH = 128
+#     TILE_HEIGHT = 128
+#     SCREEN_WIDTH, SCREEN_HEIGHT = 200, 200
 
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("AnimatedSprite Debugging")
-    clock = pygame.time.Clock()
+#     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+#     pygame.display.set_caption("AnimatedSprite Debugging")
+#     clock = pygame.time.Clock()
 
-    try:
-        sheet = load_image('girl.png').convert_alpha()
-    except Exception as e:
-        print(f"Ошибка загрузки изображения: {e}")
-        pygame.quit()
-        exit()
+#     try:
+#         sheet = load_image('girl.png').convert_alpha()
+#     except Exception as e:
+#         print(f"Ошибка загрузки изображения: {e}")
+#         pygame.quit()
+#         exit()
 
-    girl_run = AnimatedSprite(sheet, 7, 1, 50, 50)
+#     girl_run = AnimatedSprite(sheet, 7, 1, 50, 50)
 
-    all_sprites = pygame.sprite.Group()
-    all_sprites.add(girl_run)
-
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+#     all_sprites = pygame.sprite.Group()
+#     all_sprites.add(girl_run)
 
 
-        all_sprites.update()
+#     running = True
+#     while running:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 running = False
 
-        screen.fill((0, 0, 0))
-        all_sprites.draw(screen)
 
-        pygame.display.flip()
-        clock.tick(40)
+#         all_sprites.update()
 
-    pygame.quit()
+#         screen.fill((0, 0, 0))
+#         all_sprites.draw(screen)
+
+#         pygame.display.flip()
+#         clock.tick(40)
+
+#     pygame.quit()

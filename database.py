@@ -15,6 +15,7 @@ class SQLiteDatabase:
     def close(self):
         """Закрывает соединение с базой данных."""
         if self.connection:
+            self.cursor = None
             self.connection.close()
 
     def create_table(self, table_name, columns):
@@ -43,6 +44,22 @@ class SQLiteDatabase:
         self.cursor.execute(query, tuple(data.values()))
         self.connection.commit()
         self.close()
+
+    def sort_select(self, table_name):
+        """
+        Используя select_records, выдает отсортированный список кортежей
+        
+        :param table_name: Имя таблицы
+        """
+        select_no_sort = self.select_records(table_name)
+        select_sort = sorted(select_no_sort, key=lambda x: x[2])
+        for i in range(len(select_sort)):
+            id, name, result = select_sort[i]
+            select_sort[i] = [name, str(result)]
+        select_sort = list(map(lambda x: " ".join(x), select_sort))
+        if len(select_sort) >= 5:
+            select_sort = select_sort[:5]
+        return select_sort
 
     def select_records(self, table_name, conditions=None):
         """
@@ -92,28 +109,40 @@ class SQLiteDatabase:
         self.connection.commit()
         self.close()
 
+    def change_table(self, table_name, data):
+        name = data["user_name"]
+        select0 = self.select_records(table_name, {"user_name": name})
+        print(select0)
+        if select0:
+            id, user_name, time = select0[0]
+            if int(time) > data["result"]:
+                self.update_record(table_name, id, {"result": data["result"]})
+        else:
+            self.insert_record(table_name, data)
+
 
 # Пример использования:
 if __name__ == "__main__":
-    db = SQLiteDatabase("example.db")
+    db = SQLiteDatabase("labyrinth_right.sqlite")
 
     # Создание таблицы
-    db.create_table("users", "id INTEGER PRIMARY KEY, name TEXT, age INTEGER")
+    # db.create_table("users", "id INTEGER PRIMARY KEY, name TEXT, age INTEGER")
 
     # Добавление записи
-    db.insert_record("users", {"name": "Alice", "age": 25})
-    db.insert_record("users", {"name": "Bob", "age": 30})
+    # db.insert_record("users", {"name": "Alice", "age": 25})
+    # db.insert_record("users", {"name": "Bob", "age": 30})
 
     # Выбор записей
-    records = db.select_records("users", {"name": "Alice"})
-    print(records)  # Вывод: [(1, 'Alice', 25)]
+    # records = db.select_records("users", {"name": "Alice"})
+    # print(records)  # Вывод: [(1, 'Alice', 25)]
 
     # Обновление записи
-    db.update_record("users", 1, {"age": 26})
+    # db.update_record("users", 1, {"age": 26})
 
     # Удаление записи
-    db.delete_record("users", 2)
+    # db.delete_record("users", 2)
 
     # Проверка результатов
-    records = db.select_records("users")
+    # records = db.select_records("users")
+    records = db.select_records("Level_1", {"user_name": "NoName", "result": 15})
     print(records)  # Вывод: [(1, 'Alice', 26)]
