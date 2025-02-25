@@ -118,7 +118,6 @@ class PlayWindow(Window):
     def process_event(self, event):
         if event.type == pygame.QUIT:
             self.clean()
-            print(isinstance(int, pygame.time.get_ticks()))
         #    all_sprites.empty()
         #    player_group.empty()
     
@@ -286,10 +285,14 @@ def play(play_window, screen, fog_mask, game):
     if pygame.sprite.spritecollideany(play_window.player, bomb_group) or pygame.sprite.spritecollideany(play_window.player, enemy_group):
         play_window.lives.decrease()
         if play_window.lives.is_game_over():
+
+            playing_sound_file("sounds/zvuk-game-over.mp3")
+
             print("Игра окончена! Вы наступили на бомбу.")
             game = False
 
-        playing_sound_file("sounds/zvuk-sobiraniya-monetki.mp3")
+        playing_sound_file("sounds/zvuk-poteri-ochkov-v-igre.mp3")
+
         # else:
             # print(f"Осталось жизней: {lives.lives}")
 

@@ -95,25 +95,25 @@ class SQLiteDatabase:
 
 # Пример использования:
 if __name__ == "__main__":
-    db = SQLiteDatabase("example.db")
+    db = SQLiteDatabase("labyrinth_right.sqlite")
 
     # Создание таблицы
-    db.create_table("users", "id INTEGER PRIMARY KEY, name TEXT, age INTEGER")
+    # db.create_table("users", "id INTEGER PRIMARY KEY, name TEXT, age INTEGER")
 
     # Добавление записи
-    db.insert_record("users", {"name": "Alice", "age": 25})
-    db.insert_record("users", {"name": "Bob", "age": 30})
-
-    # Выбор записей
-    records = db.select_records("users", {"name": "Alice"})
-    print(records)  # Вывод: [(1, 'Alice', 25)]
-
-    # Обновление записи
-    db.update_record("users", 1, {"age": 26})
-
-    # Удаление записи
-    db.delete_record("users", 2)
+    db.insert_record("Level_1", {"user_name": "Alice", "result": 25})
+    # db.insert_record("users", {"name": "Bob", "age": 30})
+    #
+    # # Выбор записей
+    # records = db.select_records("users", {"name": "Alice"})
+    # print(records)  # Вывод: [(1, 'Alice', 25)]
+    #
+    # # Обновление записи
+    # db.update_record("users", 1, {"age": 26})
+    #
+    # # Удаление записи
+    # db.delete_record("users", 2)
 
     # Проверка результатов
-    records = db.select_records("users")
+    records = db.select_records("Level_1")
     print(records)  # Вывод: [(1, 'Alice', 26)]

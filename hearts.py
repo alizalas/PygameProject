@@ -78,6 +78,9 @@ class Lives:
         self.last_decrease_time = 0
 
     def decrease(self):
+
+        playing_sound_file("sounds/zvuk-poteri-ochkov-v-igre.mp3")
+
         current_time = time.time()  # Текущее время в секундах
         if current_time - self.last_decrease_time >= 1:  # Проверяем, прошла ли секунда
             if self.lives > 0:
