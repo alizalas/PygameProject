@@ -3,8 +3,9 @@ import random
 
 from utils import load_image
 from animation import AnimatedSprite
-from Constants import TILE_HEIGHT, TILE_WIDTH, pictures, enemy_group, coin_image, bomb_image, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
+from Constants import TILE_HEIGHT, TILE_WIDTH, pictures, enemy_group, V, all_sprites, tiles_group, coin_group, bomb_group, player_group
 from Players import WITCH
+from music import playing_sound_file
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y, floor, wall):
@@ -80,6 +81,7 @@ class Player(pygame.sprite.Sprite):
                 elif dx > 0:
                     self.facing_right = True
             else:
+                playing_sound_file("sounds/zvuk-udara-o-stenku.mp3")
                 self.is_moving = False
         else:
             self.is_moving = False
@@ -119,13 +121,13 @@ class Player(pygame.sprite.Sprite):
 
 class Coin(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        sheet = load_image(coin_image).convert_alpha()
+        sheet = load_image(pictures["coin"]).convert_alpha()
         super().__init__(sheet, 4, 4, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, 6, all_sprites, coin_group)
 
 
 class Bomb(AnimatedSprite):
     def __init__(self, pos_x, pos_y):
-        sheet = load_image(bomb_image).convert_alpha()
+        sheet = load_image(pictures["bomb"]).convert_alpha()
         super().__init__(sheet, 8, 1, TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y, 20, all_sprites, bomb_group)
 
     def update(self):

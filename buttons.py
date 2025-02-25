@@ -1,6 +1,6 @@
 import pygame
 from Constants import BUTTOM_CLICKED, WIDTH, HEIGHT, RADIO_BUTTON_CLICKED
-
+from music import playing_sound_file
 
 
 class Button_Parent(pygame.sprite.Sprite):
@@ -47,6 +47,7 @@ class Button(Button_Parent):
         if self.check_click(mouse_pos):
             event = pygame.event.Event(self.signal, {'window_name': self.text})
             pygame.event.post(event)
+            playing_sound_file("sounds/zvuk-najatiya-klavishi.mp3")
     
 
 class RadioButton(Button_Parent):
@@ -65,6 +66,7 @@ class RadioButton(Button_Parent):
             self.change()
             event = pygame.event.Event(RADIO_BUTTON_CLICKED, {'btn': self})
             pygame.event.post(event)
+            playing_sound_file("sounds/zvuk-najatiya-radiobutton.mp3")
     
     def change(self):
         self.image.fill((0, 0, 0))

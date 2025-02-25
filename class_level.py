@@ -3,7 +3,7 @@ import sys
 from Constants import screen, clock, FPS
 from utils import load_level, create_passability_map
 from level import generate_level
-from Constants import tiles_group, player_group, coin_group, bomb_group, all_sprites
+from Constants import tiles_group, player_group, coin_group, bomb_group
 from camera import Camera
 from Constants import floor, wall
 

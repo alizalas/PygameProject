@@ -1,5 +1,5 @@
 import pygame
-from Constants import WIDTH, HEIGHT, tiles_group, player_group, coin_group, bomb_group, floor, wall, enemy_group
+from Constants import WIDTH, HEIGHT, tiles_group, player_group, coin_group, bomb_group, enemy_group
 from buttons import Button, RadioButton
 from utils import create_passability_map, load_level
 from level import generate_level
@@ -7,6 +7,7 @@ from camera import Camera
 from hearts import Lives
 from Players import WITCH, GIRL, KNIGHT
 from Constants import font_coins, all_coins, pictures, FINISH_GAME, RADIO_BUTTON_CLICKED, CHOOSE_EVENT
+from music import playing_sound_file
 
 
 
@@ -54,9 +55,9 @@ class Main_Window(Window):
         self.button = Button(100, 100, (255, 0, 255), "Инструкция", (90, 60), self.btn_group)
         self.btn_r = Button(200, 100, (255, 0, 255), "Рейтинг", (90, 60), self.btn_group)
         self.btn_choose = Button(300, 100, (255, 0, 255), "Выбор персонажа", (200, 60), self.btn_group)
-        self.btn_level1 = Button(230, 370, (0, 0, 200), "Level 1", (280, 60), self.btn_group)
-        self.btn_level2= Button(230, 450, (0, 0, 175), "Level 2", (280, 60), self.btn_group)
-        self.btn_level3 = Button(230, 530, (0, 0, 105), "Level 3", (280, 60), self.btn_group)
+        self.btn_level1 = Button(230, 370, (0, 0, 200), "Level_1", (280, 60), self.btn_group)
+        self.btn_level2= Button(230, 450, (0, 0, 175), "Level_2", (280, 60), self.btn_group)
+        self.btn_level3 = Button(230, 530, (0, 0, 105), "Level_3", (280, 60), self.btn_group)
         # self.buttongroup.add(self.button, self.btn_choose, self.btn_level1, self.btn_level2, self.btn_level3, self.btn_r)
         # self.image1 = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         self.image = image
@@ -91,14 +92,40 @@ class New_window(Window):
         pygame.display.set_caption(self.name)
         intro_text = ["ИНСТРУКЦИЯ",
                     "Правила игры:",
-                    "-Можно ходить по коридорам, собирая монетки и избегая врагов и бомб",
-                    "-Надо добраться до выхода, затратив как можно меньше времени",
-                    " и собрав как можно больше монет"]
+                    "-Можно ходить по коридорам, собирая монетки и избегая драконов и бомб",
+                    "-Надо собрать все монетки, не погибнув при этом",
+                    " Удачи и хорошей игры"]
         # fon = pygame.transform.scale(self.image, (WIDTH, HEIGHT))
         screen.fill(self.color)
         self.blit_image(screen, self.image)
         self.blit_text(30, 50, intro_text, screen, 30, "white")
 
+
+class Rating(Window):
+    def __init__(self, image_name, name, color, color_text, database):
+        super().__init__(name, color)
+        self.image = image_name
+        self.color_text = color_text
+        self.level1 = 0
+        self.level2 = 0
+        self.level3 = 0
+        self.database = database
+        self.open_data()
+
+    def open_data(self):
+        self.level1 = self.database.sort_select("Level_1")
+        self.level2 = self.database.sort_select("Level_2")
+        self.level3 = self.database.sort_select("Level_3")
+    
+    def draw(self, screen):
+        pygame.display.set_caption(self.name)
+        self.blit_image(screen, self.image)
+        self.blit_text(30, 50, "Level_1", screen, 50, self.color_text)
+        self.blit_text(30, 125, self.level1, screen, 50, self.color_text)
+        self.blit_text(430, 50, "Level_2", screen, 50, self.color_text)
+        self.blit_text(430, 125, self.level2, screen, 50, self.color_text)
+        self.blit_text(830, 50, "Level_3", screen, 50, self.color_text)
+        self.blit_text(830, 125, self.level3, screen, 50, self.color_text)
 
 class PlayWindow(Window):
     def __init__(self, name, color, level):
@@ -106,7 +133,7 @@ class PlayWindow(Window):
         self.level = level
         self.level_map = load_level(level)
         self.passability_map = create_passability_map(self.level_map)
-        self.player, self.x, self.y = generate_level(self.level_map, floor, wall)
+        self.player, self.x, self.y = generate_level(self.level_map, pictures["floor"], pictures["wall"])
         self.player_name = WITCH
         self.lives = Lives()
         self.camera = Camera()
@@ -117,7 +144,6 @@ class PlayWindow(Window):
     def process_event(self, event):
         if event.type == pygame.QUIT:
             self.clean()
-            print(isinstance(int, pygame.time.get_ticks()))
         #    all_sprites.empty()
         #    player_group.empty()
     
@@ -127,12 +153,11 @@ class PlayWindow(Window):
         bomb_group.empty()
         enemy_group.empty()
         tiles_group.empty()
-        event1 = pygame.event.Event(FINISH_GAME, {"coins": self.collected_coins, "all_coins": self.all_coins_for_level, "time": get_time(self)})
+        event1 = pygame.event.Event(FINISH_GAME, {"coins_image": draw_coins(self), "time": get_time(self), "coins_collected": self.collected_coins, "all_coins": self.all_coins_for_level})
         pygame.event.post(event1)
         # self.start_time = pygame.time.get_ticks()
     
     def change_player(self, name):
-        print("Зашел")
         if name == "WITCH":
             self.player_name = WITCH
         elif name == "GIRL":
@@ -214,6 +239,7 @@ class Result(Window):
         self.coints = 0
         self.all_time = 0
         self.all_coins = 0
+        self.result = result
         if result:
             self.image = pygame.transform.scale(pictures["win"], (WIDTH, HEIGHT))
             self.color_btn = (100, 90, 50)
@@ -229,15 +255,15 @@ class Result(Window):
         screen.blit(self.image, (0, 0))
         self.btn_group.draw(screen)
         screen.blit(draw_time(self.time), (0, HEIGHT - 50))
-        screen.blit(draw_coins(self.coins, self.all_coins), (WIDTH // 2, HEIGHT - 50))
-
+        screen.blit(self.coins_image, (WIDTH // 2, HEIGHT - 50))
     def process_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             for btn in self.btn_group:
                 btn.get_click(event.pos)
         if event.type == FINISH_GAME:
             self.time = event.time
-            self.coins = event.coins
+            self.coins_image = event.coins_image
+            self.coins_collected = event.coins_collected
             self.all_coins = event.all_coins
 
 
@@ -250,8 +276,8 @@ def draw_time(current_time):
     time_surface = font_coins.render(time_text, True, (255, 255, 255))
     return time_surface
 
-def draw_coins(coins, all_coins):
-    coins_text = f"Coins: {coins}/{all_coins}"
+def draw_coins(play_window):
+    coins_text = f"Coins: {play_window.collected_coins}/{play_window.all_coins_for_level}"
     coins_surface = font_coins.render(coins_text, True, (255, 255, 255)) 
     return coins_surface
 
@@ -276,12 +302,15 @@ def play(play_window, screen, fog_mask, game):
         play_window.collected_coins += 1
         game = not (play_window.collected_coins == play_window.all_coins_for_level)
 
+        playing_sound_file("sounds/zvuk-sobiraniya-monetki.mp3")
+
             # Проверка столкновения с бомбой и врагом
     if pygame.sprite.spritecollideany(play_window.player, bomb_group) or pygame.sprite.spritecollideany(play_window.player, enemy_group):
         play_window.lives.decrease()
         if play_window.lives.is_game_over():
-            print("Игра окончена! Вы наступили на бомбу.")
+            # print("Игра окончена! Вы наступили на бомбу.")
             game = False
+        playing_sound_file("sounds/zvuk-poteri-ochkov-v-igre.mp3")
         # else:
             # print(f"Осталось жизней: {lives.lives}")
 
@@ -322,7 +351,7 @@ def play(play_window, screen, fog_mask, game):
     play_window.lives.draw(screen)
     current_time = get_time(play_window)
     time_surface = draw_time(current_time)
-    coins_surface = draw_coins(play_window.collected_coins, play_window.all_coins_for_level)
+    coins_surface = draw_coins(play_window)
     
     screen.blit(time_surface, (screen.get_width() - time_surface.get_width() - 10, 10))
     screen.blit(coins_surface, (screen.get_width() - coins_surface.get_width() - 10, 50))

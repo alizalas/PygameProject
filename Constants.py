@@ -9,7 +9,7 @@ BUTTOM_CLICKED = pygame.USEREVENT + 1
 RADIO_BUTTON_CLICKED = pygame.USEREVENT + 2
 CHOOSE_EVENT = pygame.USEREVENT + 3
 FINISH_GAME = pygame.USEREVENT + 4
-
+database_name = "labyrinth_right.sqlite"
 
 FPS = 20
 V = 5
@@ -49,18 +49,23 @@ pictures = {"фон для инструкции": load_image("cave.png"),
             "knight_player" : load_image("knight_stay.png", True),
             "knight": load_image("knight.png"),
             "win": load_image("win.png"),
-            "game_over": load_image("game_over.png")}
+            "game_over": load_image("game_over.png"),
+            "floor": ['floor1.png', 'floor4.png', 'floor5.png'],
+            "wall": ['wall1.png'],
+            "bomb": 'bomb8.png',
+            "coin": 'coin64.png',
+            "рейтинг": pygame.transform.scale(load_image("rating.jpg"), (WIDTH, HEIGHT))}
 
 
-coin_image = 'coin64.png'
-bomb_image = 'bomb8.png'
+text_for_windows = {"инструкция": ["ИНСТРУКЦИЯ",
+                    "Правила игры:",
+                    "-Можно ходить по коридорам, собирая монетки и избегая драконов и бомб",
+                    "-Надо собрать все монетки, не погибнув при этом",
+                    " Удачи и хорошей игры"]}
 
-floor = ['floor1.png', 'floor4.png', 'floor5.png']
-wall = ['wall1.png']
-
-sheet_char = load_image('witch.png')
-x_sheet, y_sheet = 1, 8# Спрайт-лист для анимации движения
-image_stay_char = load_image('witch_stay.png', True)  # Статичное изображение
+# sheet_char = load_image('witch.png')
+# x_sheet, y_sheet = 1, 8# Спрайт-лист для анимации движения
+# image_stay_char = load_image('witch_stay.png', True)  # Статичное изображение
 
 
 all_sprites = pygame.sprite.Group()
@@ -68,9 +73,8 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 coin_group = pygame.sprite.Group()
 bomb_group = pygame.sprite.Group()
-far_walls = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 button_group = pygame.sprite.Group()
 
-all_coins = {"Level 1": 5, "Level 2": 11, "Level 3": 17}
+all_coins = {"Level_1": 5, "Level_2": 11, "Level_3": 17}
 font_coins = pygame.font.Font("FSEX300.ttf", 36)
